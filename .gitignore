@@ -1,0 +1,16 @@
+# Entorno y builds
+.venv/
+venv/
+build/
+dist/
+__pycache__/
+*.pyc
+*.exe
+
+# Datos personales (nunca se suben)
+*.dat
+*.db
+*.sqlite
+*.csv
+*.xlsx
+*.pdf

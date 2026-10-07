@@ -1,0 +1,159 @@
+GESTOR DE FINANZAS
+Ingresos, egresos, deudas, categorías, gráficos, modo claro y oscuro, y datos cifrados.
+
+
+CÓMO TENER EL PROGRAMA (.exe)
+
+  1. Hacé doble clic en "construir_app.bat" (una sola vez). Tarda unos minutos la primera vez.
+     - Necesita Python 3.9 o más nuevo solo para armar el programa. Si no lo tenés, el armador te
+       lleva a python.org: al instalarlo marcá "Add python.exe to PATH".
+     - Arma todo en una carpeta aparte (.venv): no toca tu Python ni tus otros proyectos.
+  2. Al terminar, "Gestor de Finanzas.exe" queda en tu Escritorio (y también en la carpeta "dist").
+     Desde ahí se abre con doble clic, sin Python ni Visual Studio Code. Lo podés mover a donde
+     quieras o anclarlo a la barra de tareas.
+  3. Tus datos son los mismos que venías usando: el .exe lee el mismo archivo cifrado.
+
+  Si actualizás el programa (una versión nueva de estos archivos), volvé a correr construir_app.bat.
+  Windows o el antivirus pueden avisar que el .exe es "desconocido": les pasa a casi todos los
+  programas armados con PyInstaller que no están firmados. Elegí "Más información" > "Ejecutar de todas formas".
+
+  Para correrlo sin armar el .exe:   pip install -r requirements.txt   y   python main.py
+  En Linux o Mac: ./construir_app.sh (en Linux hace falta el paquete python3-tk).
+
+
+PRIMER USO
+
+  1. Creá una contraseña: con ella se cifran tus datos. Si la olvidás no se pueden recuperar.
+  2. Importá tu historial (ver abajo) o cargá movimientos con "+".
+  3. Si importás los resúmenes de Mercado Pago, tu saldo real se carga solo (ver "Saldo"). Si no,
+     tocá "Cargar mi saldo real" y escribí cuánta plata tenés en las cuentas que cargás en la app.
+
+
+CÓMO CALCULA (para que los números tengan sentido)
+
+  - Saldo: cada resumen trae el saldo del banco después de cada operación. La app guarda el saldo
+    de cierre de cada día y lo usa como punto de control: la plata de cualquier día se calcula desde
+    el saldo conocido más cercano. Así, lo que no se cuenta como ingreso o gasto (reservas, dólares)
+    o cualquier diferencia no se acumula: se corrige todos los días y coincide con el banco.
+    Sin resúmenes, usa el saldo que cargues a mano. Para atrás, solo hasta donde tenés movimientos
+    reales cargados; antes de eso la línea no se dibuja, porque no hay forma de saberlo.
+    Sin saldo real, la línea muestra la plata acumulada: lo que sobra de un período pasa al siguiente.
+  - Lo nuevo se crea como "Única vez". Si algo se repite (sueldo, alquiler, Netflix), cambiá la
+    frecuencia y, si termina, poné cuántas veces.
+  - Algo que se repite es un PLAN. Cuando cargás o importás el movimiento real (mismo tipo, monto
+    parecido ±15 %, misma semana), el plan no se cuenta otra vez. Así el sueldo no aparece doble.
+  - Si tenés cosas que se repiten todos los meses sin fecha de fin, arriba de la lista aparece un
+    aviso. Tocándolo ves solo esas: revisá que de verdad se repitan (antes "+" las creaba así).
+  - Proyección (lo que viene): tus planes + las cuotas de tus deudas + tus ingresos y gastos
+    variables estimados, que son tu promedio real de los últimos 3 meses con datos (sin contar lo
+    planificado). Así sigue tu tendencia real. El resumen te dice cuánto de lo proyectado es estimado.
+
+
+CÓMO SE USA
+
+  - Pestañas Egresos, Ingresos y Deudas. "+" crea uno nuevo.
+  - Cada movimiento se ve en una línea. "Editar" (o un clic) lo abre: nombre, cantidad, categoría,
+    frecuencia, repeticiones, fecha, hora, medio de pago y motivo. Se guarda solo.
+  - La lista muestra "Del período elegido" (cambia con las flechas ◀ ▶ y "Ver por"), "Todos" o
+    "Solo los que se repiten". Con "Buscar" filtrás por nombre, motivo, categoría o medio.
+  - "Ir a un mes con datos" (arriba a la derecha del resumen): lista los meses que tienen
+    movimientos cargados y te lleva directo. Útil si importaste un mes de otro año.
+  - Ordenar: más nuevos o más viejos primero, o por monto de mayor a menor o de menor a mayor.
+  - "Monto entre ... y ...": deja solo los movimientos en ese rango (vacío = sin límite).
+    Abajo de los filtros ves cuántos movimientos quedan y cuánto suman.
+  - Categorías: se ponen solas (Rappi = Comida y delivery, Metrogas = Servicios, UTN = Educación...).
+    Si cambiás la de un movimiento, se aplica a los demás con el mismo nombre y la app la recuerda
+    para lo que importes después.
+  - "Duplicar" copia un movimiento. La ✕ lo elimina.
+
+
+BORRAR VARIOS A LA VEZ O EMPEZAR DE CERO
+
+  - "Seleccionar" (al lado de Buscar): aparece una casilla en cada movimiento. Tocá los que quieras
+    borrar, o "Todos" para marcar todo lo que muestra la lista con el filtro y la búsqueda actuales
+    (por ejemplo, buscá "transferencia" y borrás solo esas). Después "Borrar" y "Listo".
+  - "Borrar datos" (arriba): elegí qué borrar de una vez:
+      los movimientos del período que estás mirando, todos los movimientos, todas las deudas,
+      tu saldo real, las categorías que corregiste, o "Todo" para empezar de cero.
+    Para confirmar hay que escribir BORRAR. Tu contraseña y el modo claro/oscuro se mantienen.
+  - Después de borrar aparece "↩ Tocá acá para deshacer" arriba de la lista. Funciona mientras no
+    cierres la app: al cerrarla, lo borrado queda borrado.
+  - Evolución: barras de ingresos y egresos con la línea del saldo. Clic en una barra para ver ese período.
+  - Distribución: gráfico circular de egresos o ingresos del período, agrupado por categoría,
+    nombre, motivo, hora del día o medio de pago.
+  - Balance general: como un balance contable, al cierre del período que estás mirando.
+      ACTIVO = tu plata (caja y bancos) + lo que te deben.
+      PASIVO = lo que debés (cuotas que faltan de tus deudas).
+      PATRIMONIO NETO = activo − pasivo = lo que ya tenías + el resultado del período
+      (ingresos − egresos). Abajo se controla que Activo = Pasivo + Patrimonio neto.
+
+
+LO QUE SOBRA PASA AL MES SIGUIENTE
+
+  En el resumen ves con cuánto arrancás el período y con cuánto terminás. Si en agosto te sobraron
+  $ 200.000, septiembre arranca con esos $ 200.000. Si un mes sale más de lo que entra, se usa lo
+  que venías arrastrando; si no alcanza, ese mes termina en negativo pero el siguiente arranca en
+  $ 0 (no se arrastra plata que no existe). Funciona igual por día, semana y año.
+  La cuenta arranca en tu primer movimiento real. Si cargás tu saldo real, se usa tu plata de verdad.
+
+
+DEUDAS
+
+  - "+  Nueva deuda": elegí "Yo debo" o "Me deben", a quién, el total, en cuántas cuotas y cuándo
+    vence la primera. Con − y + marcás las cuotas pagadas (o cobradas).
+  - Arriba ves cuánto pagás y cobrás el mes que viene, cuánto debés y te deben en total, y si hay
+    cuotas vencidas.
+  - Las cuotas que faltan se suman a la proyección. Las que ya pagaste no: esas ya están en tus
+    movimientos reales.
+
+
+IMPORTAR TODO TU HISTORIAL DE MERCADO PAGO
+
+  1. Desde la computadora, entrá a mercadopago.com.ar > Reportes > Resumen de cuenta
+     (https://www.mercadopago.com.ar/balance/reports/account_status).
+  2. Descargá un resumen por mes (cada uno puede cubrir hasta 31 días). Sirve el PDF que da Mercado
+     Pago, o también .csv o .xlsx.
+  3. En la app: "Importar movimientos" > "Abrir resúmenes" y elegí todos los archivos juntos.
+     La app verifica dos cosas y te avisa si algo no da:
+       - que cada fila encadene con la anterior (saldo anterior + valor = saldo nuevo): si el
+         saldo salta sin una operación, falta alguna;
+       - que todo cierre exacto con el saldo inicial y final del resumen.
+     Lee los distintos diseños del PDF (el resumen clásico y el impreso desde la web).
+  4. Revisá la lista ("Marcar todo", "Desmarcar todo", "Solo egresos", "Solo ingresos" o una por
+     una) y tocá "Importar". Los saldos diarios del banco se guardan solos.
+     Si el resumen es de hace más de 6 meses, la app te avisa (fijate el año al generarlo). Si todo
+     ya estaba cargado, aparece "Ver <mes>" para ir directo a ese mes.
+
+  También podés copiar el texto del resumen (del PDF o de la tabla en la web de Mercado Pago) y
+  pegarlo en "Importar movimientos": se lee igual, con sus saldos y la verificación.
+
+  Del PDF se usa solo el resumen en pesos: la hoja de dólares (tenencias) se saltea.
+
+  También lee CSV o Excel de otros bancos si tienen columnas de fecha, descripción y monto
+  (o débito y crédito).
+
+  Para lo último (lo de hoy o esta semana), también podés copiar la actividad y pegarla.
+
+  En cualquiera de los dos casos vienen sin marcar:
+    - lo que ya importaste antes (no se duplica, aunque antes lo hayas pegado a mano),
+    - lo rechazado o cancelado (también si el monto aparece tachado),
+    - la devolución de un pago cancelado (es la misma plata que vuelve, no un ingreso),
+    - los movimientos entre tu cuenta y tus reservas o inversiones ("Dinero retirado",
+      "Dinero reservado") y la compra o venta de dólares: es tu propia plata cambiando de lugar.
+    Si querés contar alguno, marcalo.
+
+  Las transferencias a o desde otras cuentas tuyas (la app reconoce tu nombre del PDF) SÍ se
+  cuentan: lo que mandás a otra cuenta es un egreso y lo que recibís, un ingreso. Van con la
+  categoría "Entre mis cuentas", así en el gráfico circular ves cuánto moviste.
+
+
+DÓNDE SE GUARDAN LOS DATOS
+
+  Windows:    %APPDATA%\GestorFinanzas\finanzas.dat
+  Linux/Mac:  ~/.local/share/GestorFinanzas/finanzas.dat
+
+  Es una base SQLite. Movimientos, deudas, saldo real y categorías aprendidas se guardan cifrados:
+  si la abrís con un visor de SQLite solo ves texto ilegible.
+  Para hacer una copia de seguridad, copiá ese archivo (y acordate de la contraseña).
+  Para usar otra ubicación, definí la variable de entorno GESTOR_FINANZAS_DATOS con la ruta completa.
+
